@@ -7,11 +7,10 @@ import hiber.service.CarService;
 import hiber.service.UserService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class MainApp {
-   public static void main(String[] args) throws SQLException {
+   public static void main(String[] args) {
       AnnotationConfigApplicationContext context = 
             new AnnotationConfigApplicationContext(AppConfig.class);
 
@@ -42,8 +41,8 @@ public class MainApp {
          System.out.println();
       }
 
-      System.out.println("**************");
-      System.out.println(userService.getUserByCarId("Kamazz", 4));
+      User user = userService.getUserByCarId("Kamazz", 4);
+      System.out.println(user);
       context.close();
    }
 }

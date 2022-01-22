@@ -5,7 +5,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -21,21 +20,15 @@ public class UserDaoImp implements UserDao {
    }
 
    @Override
-   @SuppressWarnings("unchecked")
    public List<User> listUsers() {
       TypedQuery<User> query=sessionFactory.getCurrentSession().createQuery("from User");
       return query.getResultList();
    }
 
    @Override
-   @SuppressWarnings("unchecked")
    public User getUserByCarId(String model, int series) {
-      Query query = sessionFactory.getCurrentSession().createQuery("FROM User WHERE car.model = :model and car.series = :series");
-      query.setParameter("model", model);
-      query.setParameter("series", series);
-      List<User> list = query.getResultList();
-      System.out.println(list.size());
-      return list.get(0);
+      String hql = "from User user where user.car.model = :model and user.car.series = :series";
+      TypedQuery<User> query = sessionFactory.openSession().createQuery(hql).setParameter("model", model).setParameter("series", series);
+      return query.setMaxResults(1).getSingleResult();
    }
-
 }
